@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        PHP_MODE: development
+    ports: [80:80]
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+      - mailhog
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: unless-stopped
+    ports: [8025:8025]
+
+  db:
+    image: mysql:8.0
+    ports: [3306:3306]
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: greatjab
+      MYSQL_ROOT_PASSWORD: mIez24get
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_520_ci
+
+volumes:
+  db:
